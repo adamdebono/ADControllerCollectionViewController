@@ -21,6 +21,8 @@
 @property (nonatomic) UIButton *backButton;
 @property (nonatomic) UIButton *forwardButton;
 
+@property (nonatomic) BOOL hasViewLoaded;
+
 @end
 
 @implementation ADControllerCollectionViewController
@@ -39,13 +41,15 @@
 
 - (void)initialisation {
 	_viewControllers = @[];
+	_tintColor = nil;
+	_hasViewLoaded = NO;
 }
 
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-		
+	
 	//Collection View
 	_flowLayout = [[UICollectionViewFlowLayout alloc] init];
 	[[self flowLayout] setScrollDirection:UICollectionViewScrollDirectionHorizontal];
@@ -73,8 +77,6 @@
 	
 	//Page Control
 	_pageControl = [[UIPageControl alloc] init];
-	[[self pageControl] setPageIndicatorTintColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
-	[[self pageControl] setCurrentPageIndicatorTintColor:[UIColor blackColor]];
 	[[self pageControl] setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[[self pageControl] setDefersCurrentPageDisplay:YES];
 	
@@ -86,7 +88,6 @@
 	
 	//Pagination Buttons
 	_forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	[[self forwardButton] setImage:[UIImage imageNamed:@"arrow-forward"] forState:UIControlStateNormal];
 	[[self forwardButton] setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[[self forwardButton] addTarget:self action:@selector(nextPage:) forControlEvents:UIControlEventTouchUpInside];
 	
@@ -96,7 +97,6 @@
 	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_forwardButton(44)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_forwardButton)]];
 	
 	_backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	[[self backButton] setImage:[UIImage imageNamed:@"arrow-backward"] forState:UIControlStateNormal];
 	[[self backButton] setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[[self backButton] addTarget:self action:@selector(previousPage:) forControlEvents:UIControlEventTouchUpInside];
 	
@@ -105,8 +105,22 @@
 	[[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view] attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:[self backButton] attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_backButton(44)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_backButton)]];
 	
+	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f) {
+		[[self forwardButton] setImage:[[UIImage imageNamed:@"arrow-forward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+		[[self backButton] setImage:[[UIImage imageNamed:@"arrow-backward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+	} else {
+		[[self forwardButton] setImage:[UIImage imageNamed:@"arrow-forward"] forState:UIControlStateNormal];
+		[[self backButton] setImage:[UIImage imageNamed:@"arrow-backward"] forState:UIControlStateNormal];
+	}
+	
 	//
 	[[self view] addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:NULL];
+	
+	if (![self tintColor]) {
+		[self setTintColor:[UIColor blackColor]];
+	} else {
+		[self setTintColor:[self tintColor]];
+	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -119,6 +133,17 @@
 
 - (void)dealloc {
 	[[self view] removeObserver:self forKeyPath:@"frame"];
+}
+
+- (void)setTintColor:(UIColor *)tintColor {
+	_tintColor = tintColor;
+	
+	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f) {
+		[[self view] setTintColor:tintColor];
+	} else {
+		[[self pageControl] setPageIndicatorTintColor:[tintColor colorWithAlphaComponent:0.5]];
+		[[self pageControl] setCurrentPageIndicatorTintColor:tintColor];
+	}
 }
 
 #pragma mark -

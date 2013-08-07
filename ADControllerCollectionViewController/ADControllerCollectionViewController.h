@@ -12,4 +12,6 @@
 
 @property (nonatomic) NSArray *viewControllers;
 
+@property (nonatomic) UIColor *tintColor;
+
 @end
