@@ -73,8 +73,8 @@
 	
 	//Page Control
 	_pageControl = [[UIPageControl alloc] init];
-	[[self pageControl] setTintColor:[UIColor blackColor]];
-	[[self pageControl] setCurrentPageIndicatorTintColor:[UIColor grayColor]];
+	[[self pageControl] setPageIndicatorTintColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
+	[[self pageControl] setCurrentPageIndicatorTintColor:[UIColor blackColor]];
 	[[self pageControl] setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[[self pageControl] setDefersCurrentPageDisplay:YES];
 	
@@ -115,6 +115,10 @@
 		[[self flowLayout] setItemSize:[[self view] frame].size];
 		[[self collectionView] reloadData];
 	}
+}
+
+- (void)dealloc {
+	[[self view] removeObserver:self forKeyPath:@"frame"];
 }
 
 #pragma mark -
