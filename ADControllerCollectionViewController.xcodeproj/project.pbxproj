@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		847D5E3917CDDC4B0045050E /* UIView+findFirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 847D5E3817CDDC4B0045050E /* UIView+findFirstResponder.m */; };
 		A201561917978AB8009ACDB2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A201561817978AB8009ACDB2 /* Foundation.framework */; };
 		A201561E17978AB8009ACDB2 /* ADControllerCollectionViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A201561D17978AB8009ACDB2 /* ADControllerCollectionViewController.h */; };
 		A201562017978AB8009ACDB2 /* ADControllerCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A201561F17978AB8009ACDB2 /* ADControllerCollectionViewController.m */; };
 		A20A016B1797C60300DBFA76 /* ADViewControllerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A20A016A1797C60300DBFA76 /* ADViewControllerCell.m */; };
-		A20A016E1797D73000DBFA76 /* UIView+findFirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = A20A016D1797D73000DBFA76 /* UIView+findFirstResponder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		847D5E3717CDDC4B0045050E /* UIView+findFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+findFirstResponder.h"; sourceTree = "<group>"; };
+		847D5E3817CDDC4B0045050E /* UIView+findFirstResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+findFirstResponder.m"; sourceTree = "<group>"; };
 		A201561517978AB8009ACDB2 /* libADControllerCollectionViewController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libADControllerCollectionViewController.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A201561817978AB8009ACDB2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A201561C17978AB8009ACDB2 /* ADControllerCollectionViewController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ADControllerCollectionViewController-Prefix.pch"; sourceTree = "<group>"; };
@@ -37,8 +39,6 @@
 		A201562917978AB9009ACDB2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		A20A01691797C60300DBFA76 /* ADViewControllerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADViewControllerCell.h; sourceTree = "<group>"; };
 		A20A016A1797C60300DBFA76 /* ADViewControllerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADViewControllerCell.m; sourceTree = "<group>"; };
-		A20A016C1797D73000DBFA76 /* UIView+findFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+findFirstResponder.h"; path = "../../../../../../Map Mate/iOS/Categories/UIView+findFirstResponder.h"; sourceTree = "<group>"; };
-		A20A016D1797D73000DBFA76 /* UIView+findFirstResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+findFirstResponder.m"; path = "../../../../../../Map Mate/iOS/Categories/UIView+findFirstResponder.m"; sourceTree = "<group>"; };
 		A2EFF5F317981E80004961E5 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A2EFF5F717981E80004961E5 /* ADControllerCollectionViewControllerAssets-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ADControllerCollectionViewControllerAssets-Info.plist"; sourceTree = "<group>"; };
 		A2EFF5F917981E80004961E5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -93,8 +93,8 @@
 		A201561A17978AB8009ACDB2 /* ADControllerCollectionViewController */ = {
 			isa = PBXGroup;
 			children = (
-				A20A016C1797D73000DBFA76 /* UIView+findFirstResponder.h */,
-				A20A016D1797D73000DBFA76 /* UIView+findFirstResponder.m */,
+				847D5E3717CDDC4B0045050E /* UIView+findFirstResponder.h */,
+				847D5E3817CDDC4B0045050E /* UIView+findFirstResponder.m */,
 				A201561D17978AB8009ACDB2 /* ADControllerCollectionViewController.h */,
 				A201561F17978AB8009ACDB2 /* ADControllerCollectionViewController.m */,
 				A20A01691797C60300DBFA76 /* ADViewControllerCell.h */,
@@ -185,7 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A20A016E1797D73000DBFA76 /* UIView+findFirstResponder.m in Sources */,
+				847D5E3917CDDC4B0045050E /* UIView+findFirstResponder.m in Sources */,
 				A201562017978AB8009ACDB2 /* ADControllerCollectionViewController.m in Sources */,
 				A20A016B1797C60300DBFA76 /* ADViewControllerCell.m in Sources */,
 			);
