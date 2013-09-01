@@ -18,8 +18,10 @@
 @property (nonatomic) UICollectionViewFlowLayout *flowLayout;
 
 @property (nonatomic) UIPageControl *pageControl;
-@property (nonatomic) UIButton *backButton;
-@property (nonatomic) UIButton *forwardButton;
+@property (nonatomic) UIButton *pageBackwardButton;
+@property (nonatomic) UIButton *pageForwardButton;
+
+@property (nonatomic) NSMutableArray *arrowsVisible;
 
 @property (nonatomic) BOOL hasViewLoaded;
 
@@ -41,6 +43,7 @@
 
 - (void)initialisation {
 	_viewControllers = @[];
+	_arrowsVisible = [NSMutableArray array];
 	_tintColor = nil;
 	_hasViewLoaded = NO;
 }
@@ -61,6 +64,7 @@
 	_collectionView = [[UICollectionView alloc] initWithFrame:[[self view] bounds] collectionViewLayout:[self flowLayout]];
 	[[self collectionView] registerClass:[ADViewControllerCell class] forCellWithReuseIdentifier:@"viewController"];
 	[[self view] addSubview:[self collectionView]];
+	[[self view] sendSubviewToBack:[self collectionView]];
 	
 	[[self collectionView] setDataSource:self];
 	[[self collectionView] setDelegate:self];
@@ -74,7 +78,6 @@
 	
 	[[self collectionView] setContentInset:UIEdgeInsetsZero];
 	
-	
 	//Page Control
 	_pageControl = [[UIPageControl alloc] init];
 	[[self pageControl] setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -84,33 +87,33 @@
 	
 	[[self view] addSubview:[self pageControl]];
 	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_pageControl]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_pageControl)]];
-	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_pageControl(36)]-20-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_pageControl)]];
+	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_pageControl(36)]-40-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_pageControl)]];
 	
 	//Pagination Buttons
-	_forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	[[self forwardButton] setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[[self forwardButton] addTarget:self action:@selector(nextPage:) forControlEvents:UIControlEventTouchUpInside];
+	_pageForwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	[[self pageForwardButton] setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[[self pageForwardButton] addTarget:self action:@selector(nextPage:) forControlEvents:UIControlEventTouchUpInside];
 	
-	[[self view] addSubview:[self forwardButton]];
-	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[_forwardButton(44)]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_forwardButton)]];
-	[[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view] attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:[self forwardButton] attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
-	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_forwardButton(44)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_forwardButton)]];
+	[[self view] addSubview:[self pageForwardButton]];
+	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[_pageForwardButton(44)]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_pageForwardButton)]];
+	[[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view] attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:[self pageForwardButton] attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_pageForwardButton(44)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_pageForwardButton)]];
 	
-	_backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	[[self backButton] setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[[self backButton] addTarget:self action:@selector(previousPage:) forControlEvents:UIControlEventTouchUpInside];
+	_pageBackwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	[[self pageBackwardButton] setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[[self pageBackwardButton] addTarget:self action:@selector(previousPage:) forControlEvents:UIControlEventTouchUpInside];
 	
-	[[self view] addSubview:[self backButton]];
-	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_backButton(44)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_backButton)]];
-	[[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view] attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:[self backButton] attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
-	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_backButton(44)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_backButton)]];
+	[[self view] addSubview:[self pageBackwardButton]];
+	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[_pageBackwardButton(44)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_pageBackwardButton)]];
+	[[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view] attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:[self pageBackwardButton] attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+	[[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_pageBackwardButton(44)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_pageBackwardButton)]];
 	
 	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f) {
-		[[self forwardButton] setImage:[[UIImage imageNamed:@"arrow-forward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-		[[self backButton] setImage:[[UIImage imageNamed:@"arrow-backward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+		[[self pageForwardButton] setImage:[[UIImage imageNamed:@"arrow-forward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+		[[self pageBackwardButton] setImage:[[UIImage imageNamed:@"arrow-backward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 	} else {
-		[[self forwardButton] setImage:[UIImage imageNamed:@"arrow-forward"] forState:UIControlStateNormal];
-		[[self backButton] setImage:[UIImage imageNamed:@"arrow-backward"] forState:UIControlStateNormal];
+		[[self pageForwardButton] setImage:[UIImage imageNamed:@"arrow-forward"] forState:UIControlStateNormal];
+		[[self pageBackwardButton] setImage:[UIImage imageNamed:@"arrow-backward"] forState:UIControlStateNormal];
 	}
 	
 	//
@@ -163,10 +166,23 @@
 		[controller didMoveToParentViewController:self];
 	}
 	
+	for (int i=0; i<[viewControllers count]; i++) {
+		if (i >= [[self arrowsVisible] count]) {
+			[[self arrowsVisible] addObject:@YES];
+		}
+	}
+	
 	[[self collectionView] reloadData];
 	
 	[[self pageControl] setNumberOfPages:[[self viewControllers] count]];
 	[self setPage:0 animated:NO];
+}
+
+- (void)setArrowsVisible:(BOOL)visible forViewControllerAtIndex:(NSUInteger)index {
+	if (index < [[self arrowsVisible] count]) {
+		[[self arrowsVisible] replaceObjectAtIndex:index withObject:@(visible)];
+		[self updateCurrentPage];
+	}
 }
 
 #pragma mark - Pagination
@@ -176,33 +192,35 @@
 	int page = floor(([[self collectionView] contentOffset].x - pageWidth / 2) / pageWidth) + 1;
 	[[self pageControl] setCurrentPage:page];
 	
-	if ([[self pageControl] currentPage] == 0) {
-		if ([[self backButton] alpha] == 1) {
+	BOOL hideArrows = ![[[self arrowsVisible] objectAtIndex:page] boolValue];
+	
+	if ([[self pageControl] currentPage] == 0 || hideArrows) {
+		if ([[self pageBackwardButton] alpha] == 1) {
 			[UIView animateWithDuration:0.25 animations:^{
-				[[self backButton] setAlpha:0];
+				[[self pageBackwardButton] setAlpha:0];
 			}];
 		}
-	} else if ([[self backButton] alpha] == 0) {
+	} else if ([[self pageBackwardButton] alpha] == 0) {
 		[UIView animateWithDuration:0.25 animations:^{
-			[[self backButton] setAlpha:1];
+			[[self pageBackwardButton] setAlpha:1];
 		}];
 	}
 	
-	if ([[self pageControl] currentPage] == [[self pageControl] numberOfPages] - 1) {
-		if ([[self forwardButton] alpha] == 1) {
+	if ([[self pageControl] currentPage] == [[self pageControl] numberOfPages] - 1 || hideArrows) {
+		if ([[self pageForwardButton] alpha] == 1) {
 			[UIView animateWithDuration:0.25 animations:^{
-				[[self forwardButton] setAlpha:0];
+				[[self pageForwardButton] setAlpha:0];
 			}];
 		}
-	} else if ([[self forwardButton] alpha] == 0) {
+	} else if ([[self pageForwardButton] alpha] == 0) {
 		[UIView animateWithDuration:0.25 animations:^{
-			[[self forwardButton] setAlpha:1];
+			[[self pageForwardButton] setAlpha:1];
 		}];
 	}
 }
 
 - (void)pageControlChanged:(UIPageControl *)sender {
-	[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[sender currentPage] inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+	[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[sender currentPage] inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 - (void)nextPage:(id)sender {
