@@ -202,7 +202,8 @@
 }
 
 - (void)pageControlChanged:(UIPageControl *)sender {
-	[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[sender currentPage] inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+	//[[self collectionView] scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[sender currentPage] inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+	[self setPage:[sender currentPage] animated:YES];
 }
 
 - (void)nextPage:(id)sender {
