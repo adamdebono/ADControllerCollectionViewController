@@ -14,4 +14,6 @@
 
 @property (nonatomic) UIColor *tintColor;
 
+- (void)setArrowsVisible:(BOOL)visible forViewControllerAtIndex:(NSUInteger)index;
+
 @end
